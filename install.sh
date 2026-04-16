@@ -16,13 +16,13 @@ for skill_dir in "$REPO_DIR"/*/; do
     # Collision: exists and is NOT already a symlink to this repo
     if [[ -e "$target" && ! -L "$target" ]]; then
         echo "SKIP (conflict): $skill_name — real directory already exists at $target"
-        ((skipped++))
+        skipped=$((skipped + 1))
         continue
     fi
 
     ln -sfn "$skill_dir" "$target"
     echo "Linked: $skill_name"
-    ((linked++))
+    linked=$((linked + 1))
 done
 
 echo "Done. $linked linked, $skipped skipped."
