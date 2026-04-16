@@ -1,5 +1,5 @@
 ---
-name: gromacs-prep
+name: gmx-prep
 description: GROMACS MD simulation preparation. Use when setting up new simulations,
   generating mdp files, writing setup or submission scripts, or troubleshooting
   preparation steps for any stage of the standard workflow (EM, NVT, NPT,
