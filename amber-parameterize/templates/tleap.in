@@ -1,0 +1,12 @@
+# tleap input template for GAFF2 small-molecule parameterization
+# Replace MOL_NAME, MOL2_PATH, FRCMOD_PATH, PRMTOP_PATH, INPCRD_PATH
+# with actual values before running: tleap -f tleap.in
+
+source leaprc.gaff2
+
+MOL_NAME = loadmol2 MOL2_PATH
+check MOL_NAME
+loadamberparams FRCMOD_PATH
+saveamberparm MOL_NAME PRMTOP_PATH INPCRD_PATH
+
+quit

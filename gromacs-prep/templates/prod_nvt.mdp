@@ -1,0 +1,51 @@
+; Production NVT — sd (Langevin) integrator
+; Preferred for IDP / flexible peptide work
+; ff99SBws-STQ / TIP4P-2005
+
+integrator               = sd
+dt                       = 0.002        ; ps
+nsteps                   = 50000000     ; 100 ns — adjust as needed
+comm-mode                = Linear
+nstcomm                  = 100
+
+; Output
+nstxout                  = 0
+nstvout                  = 0
+nstfout                  = 0
+nstxout-compressed       = 5000         ; 10 ps
+nstlog                   = 5000
+nstenergy                = 5000
+compressed-x-grps        = non-Water
+
+; Neighbour list
+cutoff-scheme            = Verlet
+nstlist                  = 10
+pbc                      = xyz
+
+; Electrostatics
+coulombtype              = PME
+rcoulomb                 = 1.0
+pme-order                = 4
+fourierspacing           = 0.12
+
+; Van der Waals
+vdwtype                  = Cut-off
+rvdw                     = 1.0
+DispCorr                 = EnerPres
+
+; Bonds
+constraints              = h-bonds
+constraint_algorithm     = lincs
+lincs-iter               = 1
+lincs-order              = 4
+continuation             = yes
+
+; Temperature — sd integrator acts as its own thermostat
+tc-grps                  = Protein Non-Protein
+tau_t                    = 1.0    1.0
+ref_t                    = 300    300
+
+; No pressure coupling (NVT)
+pcoupl                   = no
+
+gen_vel                  = no
