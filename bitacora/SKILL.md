@@ -1,6 +1,6 @@
 ---
 name: bitacora
-description: Append and query a lab-notebook log (LABNOTEBOOK.md) of work done in the current project. Run before /clear to record what was done this session.
+description: Prepend and query a lab-notebook log (LABNOTEBOOK.md) of work done in the current project. Run before /clear to record what was done this session.
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Bash
 ---
@@ -52,7 +52,7 @@ Each entry uses this structure (omit optional sections when empty):
 
 Figures use relative paths to files already in `analysis/` — no copying or embedding.
 
-Entries are **appended** in chronological order.
+Entries are **prepended** (newest first) so the most recent entry appears at the top of the file.
 
 ---
 
@@ -72,7 +72,7 @@ Entries are **appended** in chronological order.
 
 4. **Apply any edits** and show the revised draft if changes were requested.
 
-5. **On confirmation**: append the entry to `LABNOTEBOOK.md` (create the file first if it doesn't exist using the `init` template). Report the date and line count written.
+5. **On confirmation**: prepend the entry to `LABNOTEBOOK.md` by inserting it immediately after the header block (the `---` separator line). Create the file first if it doesn't exist using the `init` template. Report the date and line count written.
 
 If `log "..."` was used, pre-populate the Summary field with the quoted text before inferring the rest.
 
