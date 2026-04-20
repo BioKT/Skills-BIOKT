@@ -21,6 +21,7 @@ Simulations are run primarily with GROMACS and AMBER, analysed with MDtraj, and 
 | `gmx-install` | GROMACS source build with PLUMED, GPU (CUDA), and MPI support; includes benchmark testing |
 | `amber-parameterize` | Small-molecule parameterization with AmberTools (antechamber, parmchk2, tleap); GAFF/GAFF2 force fields; GROMACS conversion via acpype |
 | `dft-homo-lumo` | DFT geometry optimisation and HOMO/LUMO frontier orbital analysis using PySCF |
+| `bash-parallelize` | Identify independent work items in a task description or bash loop and run them in parallel using subagents; safety-checks system load before launching |
 
 ## Installation
 
@@ -48,4 +49,5 @@ Invoke a skill from any Claude Code session:
 /gmx-install test
 /amber-parameterize
 /dft-homo-lumo
+/bash-parallelize
 ```
