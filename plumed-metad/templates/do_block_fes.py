@@ -1,3 +1,9 @@
+# Block analysis script for free energy error estimation.
+# Author:  Max Bonomi
+# Source:  PLUMED Masterclass 21.4 — Metadynamics (2021)
+#          https://github.com/plumed/masterclass-21-4
+# Copied unmodified. All credit belongs to the original author.
+
 import math
 import sys
 import numpy as np

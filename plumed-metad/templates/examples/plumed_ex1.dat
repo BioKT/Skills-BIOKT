@@ -1,3 +1,7 @@
+# Source:  PLUMED Masterclass 21.4 — Metadynamics
+# Author:  Max Bonomi (2021)
+#          https://github.com/plumed/masterclass-21-4
+# Copied from the masterclass solution files for reference. Adapt CV definitions for your system.
 # Activate MOLINFO functionalities
 MOLINFO STRUCTURE=../data/diala/dialaA.pdb 
 # Compute the backbone dihedral angle phi, defined by atoms C-N-CA-C

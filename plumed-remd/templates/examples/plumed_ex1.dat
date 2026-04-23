@@ -1,3 +1,7 @@
+# Source:  PLUMED Masterclass 21.5 — Multiple Replicas
+# Author:  Giovanni Bussi (2021)
+#          https://github.com/plumed/masterclass-21-5
+# Copied from the masterclass solution files for reference. Adapt CV definitions for your system.
 # vim:ft=plumed
 MOLINFO STRUCTURE=../reference.pdb
 phi: TORSION ATOMS=@phi-2

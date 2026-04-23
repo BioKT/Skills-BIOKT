@@ -276,6 +276,31 @@ mpiexec -np 32 gmx_mpi mdrun \
 
 ---
 
+## Credits
+
+This skill is inspired by and based on:
+
+**PLUMED Masterclass 21.5 — Multiple Replicas**
+Author: Giovanni Bussi (SISSA, Trieste), 2021
+https://github.com/plumed/masterclass-21-5
+
+The `wham.py` script (originally from Masterclass 21.3, same author) and the example files
+in `templates/examples/` are taken directly from that masterclass. All credit for those files
+belongs to Giovanni Bussi.
+
+This skill also draws on material from:
+
+**PLUMED Masterclass 21.3 — Umbrella Sampling**
+Author: Giovanni Bussi (SISSA, Trieste), 2021
+https://github.com/plumed/masterclass-21-3
+
+The generic workflow, templates, and SKILL.md text are original additions built on top
+of the masterclass material.
+
+PLUMED is developed by the PLUMED consortium: https://www.plumed.org
+
+---
+
 ## See Also
 
 - `gmx-prep` — System preparation: EM → NVT → NPT; also covers H-REMD mdp setup

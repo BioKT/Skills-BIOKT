@@ -265,6 +265,23 @@ gmx mdrun -plumed templates/examples/plumed_ex1.dat \
 
 ---
 
+## Credits
+
+This skill is inspired by and based on:
+
+**PLUMED Masterclass 21.4 — Metadynamics**
+Author: Max Bonomi (Institut Pasteur, Paris), 2021
+https://github.com/plumed/masterclass-21-4
+
+The `do_block_fes.py` script and the example files in `templates/examples/` are taken directly
+from that masterclass. All credit for those files belongs to Max Bonomi.
+The generic workflow, templates, and SKILL.md text are original additions built on top
+of the masterclass material.
+
+PLUMED is developed by the PLUMED consortium: https://www.plumed.org
+
+---
+
 ## See Also
 
 - `gmx-prep` — System preparation: EM → NVT → NPT

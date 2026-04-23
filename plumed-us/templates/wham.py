@@ -1,3 +1,11 @@
+# Binless WHAM implementation.
+# Author:  Giovanni Bussi
+# Source:  PLUMED Masterclass 21.3 — Umbrella Sampling (2021)
+#          https://github.com/plumed/masterclass-21-3
+# Also used in PLUMED Masterclass 21.5 — Multiple Replicas
+#          https://github.com/plumed/masterclass-21-5
+# Copied unmodified. All credit belongs to the original author.
+
 import numpy as np
 
 def wham(bias,
