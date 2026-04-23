@@ -1,0 +1,33 @@
+# vim:ft=plumed
+# Generic unbiased monitoring template
+# Replace each CAPS placeholder before use:
+#   CV1_DEFINITION     — e.g.  TORSION ATOMS=A1,A2,A3,A4
+#                               DISTANCE ATOMS=GRP1,GRP2
+#                               RMSD REFERENCE=ref.pdb TYPE=OPTIMAL
+#                               CUSTOM ARG=x,y FUNC=... PERIODIC=NO
+#   SECONDARY_CV       — optional second CV to monitor without biasing (remove if not needed)
+#   REFERENCE_PDB      — path to PDB for MOLINFO shortcuts; remove MOLINFO line if unused
+#   CV1_MIN/MAX        — physical bounds for histogram grid
+#   CV1_BANDWIDTH      — kernel bandwidth ≈ 0.5 * window_spacing; 0.05 rad for torsion, 0.01 nm for distance
+#   NSTEPS             — total nsteps in gmx mdrun (for DUMPGRID STRIDE)
+
+MOLINFO STRUCTURE=REFERENCE_PDB     # remove this line if not using MOLINFO shortcuts
+
+# Collective variable to analyse
+cv1: CV1_DEFINITION
+
+# Secondary CV to monitor (optional — remove if not needed)
+secondary: SECONDARY_CV_DEFINITION
+
+# Accumulate histogram of cv1 during the simulation
+hhcv1: HISTOGRAM ARG=cv1 STRIDE=100 GRID_MIN=CV1_MIN GRID_MAX=CV1_MAX \
+       GRID_BIN=200 BANDWIDTH=CV1_BANDWIDTH
+
+# Convert histogram to free energy surface: F(s) = -kBT ln h(s)
+ffcv1: CONVERT_TO_FES GRID=hhcv1
+
+# Dump FES at the end of the simulation (STRIDE = nsteps so it fires once)
+DUMPGRID GRID=ffcv1 FILE=fes_cv1.dat STRIDE=NSTEPS
+
+# Print CV values to file for time-series analysis and sigma estimation
+PRINT ARG=cv1,secondary STRIDE=100 FILE=colvar.dat

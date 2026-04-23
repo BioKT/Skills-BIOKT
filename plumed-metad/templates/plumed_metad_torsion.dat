@@ -1,0 +1,41 @@
+# vim:ft=plumed
+# Generic metadynamics template: periodic CV (torsion / dihedral angle)
+# Suitable for: backbone/side-chain dihedral angles, any periodic angular CV
+#
+# Replace CAPS placeholders before use:
+#   REFERENCE_PDB       — structure file for MOLINFO shortcuts (remove line if unused)
+#   ATOM1..4            — four atoms defining the dihedral; or use @shortcut with MOLINFO
+#   SECONDARY_CV        — optional monitor-only CV definition (remove if not needed)
+#   BIASFACTOR_VALUE    — γ = (T + ΔT)/T; try 8–15 for moderate barriers
+#   SIGMA_VALUE         — Gaussian width ≈ std-dev of CV from short unbiased run
+#   CV1_MIN / CV1_MAX   — grid bounds (e.g. -pi, pi for a full dihedral)
+#   GRID_SPACING        — bin width; must be smaller than SIGMA_VALUE (e.g. 0.05 rad)
+#
+# Typical SIGMA estimation:
+#   Run a short unbiased simulation, then:
+#   import plumed, numpy as np
+#   c = plumed.read_as_pandas("colvar.dat")
+#   print(np.std(c["cv1"]))
+
+MOLINFO STRUCTURE=REFERENCE_PDB     # remove if not using MOLINFO shortcuts
+
+# Collective variable to bias (torsion angle)
+cv1: TORSION ATOMS=ATOM1,ATOM2,ATOM3,ATOM4
+# Alternative with MOLINFO shortcut: cv1: TORSION ATOMS=@phi-N
+
+# Secondary CV to monitor without biasing (optional — remove if not needed)
+monitor: SECONDARY_CV_DEFINITION
+
+# Well-tempered metadynamics
+metad: METAD ARG=cv1 ...
+  PACE=500                          # deposit a Gaussian every 500 steps (= 1 ps at dt=2 fs)
+  HEIGHT=1.2                        # initial Gaussian height (kJ/mol)
+  BIASFACTOR=BIASFACTOR_VALUE       # well-tempered bias factor gamma
+  SIGMA=SIGMA_VALUE                 # Gaussian width (rad)
+  FILE=HILLS                        # bias history file
+  GRID_MIN=CV1_MIN                  # lower grid bound
+  GRID_MAX=CV1_MAX                  # upper grid bound
+  GRID_SPACING=GRID_SPACING         # grid bin width (must be < SIGMA)
+...
+
+PRINT ARG=cv1,monitor,metad.bias FILE=COLVAR STRIDE=10

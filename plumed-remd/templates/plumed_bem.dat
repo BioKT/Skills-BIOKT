@@ -1,0 +1,42 @@
+# vim:ft=plumed
+# Generic bias-exchange metadynamics (BEM) template
+# Each replica biases a different CV; replicas can exchange configurations randomly.
+# RANDOM_EXCHANGES allows any pair to attempt exchange (not just neighbours).
+#
+# Run command:
+#   mpiexec -np N_REPLICAS gmx_mpi mdrun \
+#       -multidir rep_0 rep_1 ... rep_{N-1} \
+#       -plumed ../plumed_bem.dat \
+#       -nsteps NSTEPS -replex 200
+#
+# Replace CAPS placeholders:
+#   CV1_DEFINITION, CV2_DEFINITION  — CVs to be used across replicas
+#   REFERENCE_PDB                   — for MOLINFO; remove if unused
+#   SIGMA_VALUE                     — Gaussian width (same or different per replica)
+#   BIASFACTOR_VALUE                — well-tempered bias factor
+#   CV_MIN / CV_MAX                 — grid bounds (must cover all replicas' CV ranges)
+#   The @replicas: lists must each have exactly N_REPLICAS comma-separated entries.
+#   Set HEIGHT=0.0 for any replica that should run unbiased (neutral reference).
+
+MOLINFO STRUCTURE=REFERENCE_PDB     # remove if not using MOLINFO shortcuts
+RANDOM_EXCHANGES                    # allow exchange between any pair of replicas
+
+# Define all CVs that appear in any replica's ARG list
+cv1: CV1_DEFINITION
+cv2: CV2_DEFINITION                 # remove if all replicas use only cv1
+
+# Bias-exchange metadynamics:
+# ARG=@replicas:  — each replica biases the CV listed at its index position
+# HEIGHT=@replicas: — set 0.0 for the unbiased reference replica (if any)
+m: METAD ...
+  ARG=@replicas:CV_FOR_REP0,CV_FOR_REP1,CV_FOR_REP2
+  SIGMA=SIGMA_VALUE
+  HEIGHT=@replicas:HEIGHT_REP0,HEIGHT_REP1,HEIGHT_REP2
+  BIASFACTOR=BIASFACTOR_VALUE
+  PACE=500
+  GRID_MIN=CV_MIN
+  GRID_MAX=CV_MAX
+...
+
+# Print all relevant CVs for downstream analysis
+PRINT ARG=cv1,cv2 FILE=COLVAR STRIDE=100

@@ -1,0 +1,72 @@
+# vim:ft=plumed
+# Generic reweighting template for post-processing a metadynamics trajectory
+#
+# Usage:
+#   plumed driver --plumed plumed_reweight.dat --ixtc traj.xtc
+#
+# This template reads the HILLS file from a completed metadynamics run (RESTART=YES)
+# and deposits no new Gaussians (PACE=10000000, HEIGHT=0.0). It then uses REWEIGHT_BIAS
+# to produce logweights that turn the biased ensemble into an unbiased one.
+# The FES is then projected onto cv1 (and optionally cv2).
+#
+# cv1 and cv2 can be ANY CVs — they need not be the CV that was biased.
+# This is how you project the unbiased FES onto observables not used during the simulation.
+#
+# Replace CAPS placeholders:
+#   BIASED_CV_DEFINITION  — same CV definition that was used in the METAD ARG= field
+#   CV1_DEFINITION        — CV to project the unbiased FES onto (can be same as BIASED_CV)
+#   CV2_DEFINITION        — optional second projection CV (remove hhcv2/ffcv2/DUMPGRID block if not needed)
+#   FIRST_ATOM-LAST_ATOM  — for WHOLEMOLECULES if RMSD CVs are present
+#   REFERENCE_PDB         — for MOLINFO; remove if unused
+#   BIASFACTOR_VALUE      — must match the value used in the production run
+#   SIGMA_VALUE           — must match the value used in the production run
+#   HILLS_FILE            — path to the HILLS file from the production run (default: HILLS)
+#   CV_MIN / CV_MAX       — grid bounds for the biased CV (must match production run)
+#   GRID_SPACING          — must match production run
+#   CV1_MIN/MAX, CV2_MIN/MAX — bounds for projection CVs
+#   CV1_BIN, CV2_BIN      — number of bins for projection histograms
+#   CV1_BANDWIDTH, CV2_BANDWIDTH — kernel bandwidth for histograms (≈ 0.5 * grid_spacing)
+#   TEMPERATURE_K         — simulation temperature in Kelvin
+
+WHOLEMOLECULES ENTITY0=FIRST_ATOM-LAST_ATOM  # remove if no RMSD CVs
+
+MOLINFO STRUCTURE=REFERENCE_PDB              # remove if not using MOLINFO shortcuts
+
+# Biased CV (must match production run exactly)
+biased_cv: BIASED_CV_DEFINITION
+
+# Projection CVs (can differ from the biased CV)
+cv1: CV1_DEFINITION
+cv2: CV2_DEFINITION   # optional; remove hhcv2/ffcv2/DUMPGRID_cv2 block if not needed
+
+# Read existing HILLS file without depositing new Gaussians
+metad: METAD ARG=biased_cv ...
+  PACE=10000000
+  HEIGHT=0.0
+  BIASFACTOR=BIASFACTOR_VALUE
+  SIGMA=SIGMA_VALUE
+  FILE=HILLS_FILE
+  GRID_MIN=CV_MIN
+  GRID_MAX=CV_MAX
+  GRID_SPACING=GRID_SPACING
+  RESTART=YES
+...
+
+# Compute reweighting logweights from the accumulated bias
+lw: REWEIGHT_BIAS TEMP=TEMPERATURE_K
+
+# Weighted histograms for cv1
+hhcv1: HISTOGRAM ARG=cv1 STRIDE=50 \
+       GRID_MIN=CV1_MIN GRID_MAX=CV1_MAX GRID_BIN=CV1_BIN BANDWIDTH=CV1_BANDWIDTH \
+       LOGWEIGHTS=lw
+ffcv1: CONVERT_TO_FES GRID=hhcv1
+DUMPGRID GRID=ffcv1 FILE=fes_cv1_reweighted.dat
+
+# Weighted histograms for cv2 (optional — remove this block if not needed)
+hhcv2: HISTOGRAM ARG=cv2 STRIDE=50 \
+       GRID_MIN=CV2_MIN GRID_MAX=CV2_MAX GRID_BIN=CV2_BIN BANDWIDTH=CV2_BANDWIDTH \
+       LOGWEIGHTS=lw
+ffcv2: CONVERT_TO_FES GRID=hhcv2
+DUMPGRID GRID=ffcv2 FILE=fes_cv2_reweighted.dat
+
+PRINT ARG=cv1,cv2,biased_cv,metad.bias FILE=COLVAR_REWEIGHT STRIDE=10

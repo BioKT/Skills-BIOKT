@@ -1,0 +1,39 @@
+# vim:ft=plumed
+# Generic metadynamics template: single RMSD from a reference state
+# Suitable for: protein folding (RMSD to folded state), ligand binding (RMSD to bound pose),
+#               conformational changes where one reference structure is known
+#
+# Replace CAPS placeholders before use:
+#   FIRST_ATOM-LAST_ATOM  — atom range for WHOLEMOLECULES (e.g. 1-1234); required to prevent
+#                           PBC-induced RMSD jumps; use all heavy atoms or CA atoms
+#   REFERENCE_PDB         — path to reference PDB for MOLINFO (remove line if unused)
+#   REFERENCE_STATE_PDB   — PDB file of the reference state for RMSD
+#   SECONDARY_CV          — optional monitor-only CV (remove if not needed)
+#   BIASFACTOR_VALUE      — γ = (T + ΔT)/T; try 20–60 for protein barriers
+#   CV1_MAX               — upper RMSD bound (nm); 5.0 nm is usually sufficient
+#   GRID_SPACING          — 0.02 nm is typical for protein RMSD
+
+# Prevent PBC-induced discontinuities in RMSD
+WHOLEMOLECULES ENTITY0=FIRST_ATOM-LAST_ATOM
+
+MOLINFO STRUCTURE=REFERENCE_PDB     # remove if not using MOLINFO shortcuts
+
+# Collective variable: RMSD from the reference state
+cv1: RMSD REFERENCE=REFERENCE_STATE_PDB TYPE=OPTIMAL
+
+# Secondary CV to monitor without biasing (optional)
+monitor: SECONDARY_CV_DEFINITION
+
+# Well-tempered metadynamics biasing RMSD
+metad: METAD ARG=cv1 ...
+  PACE=500
+  HEIGHT=1.2
+  BIASFACTOR=BIASFACTOR_VALUE
+  SIGMA=0.05                        # 0.05 nm is typical for protein RMSD
+  FILE=HILLS
+  GRID_MIN=0.0                      # RMSD is always >= 0
+  GRID_MAX=CV1_MAX
+  GRID_SPACING=GRID_SPACING
+...
+
+PRINT ARG=cv1,monitor,metad.bias FILE=COLVAR STRIDE=10

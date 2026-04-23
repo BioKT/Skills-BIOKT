@@ -1,0 +1,41 @@
+# vim:ft=plumed
+# Generic metadynamics template: 2D bias using two RMSD CVs
+# Suitable for: two-state transitions (folding A↔B, conformational switching,
+#               binding/unbinding with known bound and unbound poses, nucleation)
+# Common practice: compute RMSD from CA atoms only (reduces noise, focuses on backbone)
+#
+# Replace CAPS placeholders before use:
+#   FIRST_ATOM-LAST_ATOM  — atom range for WHOLEMOLECULES (CA atoms or all heavy atoms)
+#   REFERENCE_PDB         — for MOLINFO; remove if unused
+#   STATE_A_PDB           — reference structure for state A
+#   STATE_B_PDB           — reference structure for state B
+#   SECONDARY_CV          — optional monitor-only CV (remove if not needed)
+#   BIASFACTOR_VALUE      — γ; try 30–60 for large barriers between distinct folds/poses
+#   CV1_MAX / CV2_MAX     — upper RMSD bounds (nm); 5.0 nm is usually sufficient
+
+WHOLEMOLECULES ENTITY0=FIRST_ATOM-LAST_ATOM
+
+MOLINFO STRUCTURE=REFERENCE_PDB     # remove if not using MOLINFO shortcuts
+
+# CV1: RMSD from state A (e.g., folded, bound, alpha-helical)
+cv1: RMSD REFERENCE=STATE_A_PDB TYPE=OPTIMAL
+
+# CV2: RMSD from state B (e.g., unfolded, unbound, beta-sheet)
+cv2: RMSD REFERENCE=STATE_B_PDB TYPE=OPTIMAL
+
+# Secondary CV (optional)
+monitor: SECONDARY_CV_DEFINITION
+
+# 2D well-tempered metadynamics
+metad: METAD ARG=cv1,cv2 ...
+  PACE=500
+  HEIGHT=1.2
+  BIASFACTOR=BIASFACTOR_VALUE
+  SIGMA=0.05,0.05                   # one sigma per CV; 0.05 nm typical for RMSD
+  FILE=HILLS
+  GRID_MIN=0.0,0.0
+  GRID_MAX=CV1_MAX,CV2_MAX
+  GRID_SPACING=0.02,0.02
+...
+
+PRINT ARG=cv1,cv2,monitor,metad.bias FILE=COLVAR STRIDE=10

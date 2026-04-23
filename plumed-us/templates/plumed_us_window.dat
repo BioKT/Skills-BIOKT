@@ -1,0 +1,22 @@
+# vim:ft=plumed
+# Generic single umbrella sampling window
+# One copy of this file per window, with AT= set to each window center.
+# Replace each CAPS placeholder before use:
+#   CV1_DEFINITION     — reaction coordinate (TORSION, DISTANCE, RMSD, CUSTOM, ...)
+#   SECONDARY_CV       — optional second CV to monitor (remove if not needed)
+#   REFERENCE_PDB      — structure for MOLINFO; remove MOLINFO line if unused
+#   KAPPA_VALUE        — spring constant in kJ/mol/unit² (200 for torsion, 1000 for distance)
+#   WINDOW_CENTER      — target value of cv1 for this window
+#   WINDOW_IDX         — window index (0, 1, 2, ...) for output file naming
+#   STRIDE             — print frequency in MD steps
+
+MOLINFO STRUCTURE=REFERENCE_PDB     # remove if not using MOLINFO shortcuts
+
+cv1: CV1_DEFINITION
+secondary: SECONDARY_CV_DEFINITION  # optional; remove if not needed
+
+# Harmonic restraint centred at WINDOW_CENTER
+bb: RESTRAINT ARG=cv1 KAPPA=KAPPA_VALUE AT=WINDOW_CENTER
+
+# Write cv1, secondary CV, and bias potential to file
+PRINT ARG=cv1,secondary,bb.bias FILE=colvar_WINDOW_IDX.dat STRIDE=STRIDE

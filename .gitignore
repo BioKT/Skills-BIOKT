@@ -1,0 +1,8 @@
+# Masterclass notebooks and solution files
+*.ipynb
+*.ipynb.*
+solution.*
+masterclass-*/
+
+# macOS
+.DS_Store

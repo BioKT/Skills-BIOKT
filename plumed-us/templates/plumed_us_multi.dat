@@ -1,0 +1,31 @@
+# vim:ft=plumed
+# Generic multi-window umbrella sampling template using PLUMED @replicas: syntax.
+# A single plumed.dat is shared by all replicas; GROMACS assigns each replica
+# its own AT= value from the comma-separated list.
+#
+# Run with:
+#   mpiexec -np N_REPLICAS gmx_mpi mdrun \
+#       -multidir rep_0 rep_1 ... rep_{N-1} \
+#       -plumed ../plumed_us_multi.dat \
+#       -nsteps NSTEPS [-replex 200]
+#
+# Output: each replica writes colvar_multi.dat (GROMACS appends replica index:
+#         colvar_multi.0.dat, colvar_multi.1.dat, ...)
+#
+# Replace each CAPS placeholder:
+#   CV1_DEFINITION     — reaction coordinate
+#   SECONDARY_CV       — optional monitor-only CV
+#   REFERENCE_PDB      — for MOLINFO; remove that line if unused
+#   KAPPA_VALUE        — spring constant (same for all windows)
+#   AT_VALUE_i         — window center for replica i
+#                        Generate with: np.linspace(MIN, MAX, N, endpoint=False_for_periodic)
+
+MOLINFO STRUCTURE=../REFERENCE_PDB  # path is relative to each replica directory
+
+cv1: CV1_DEFINITION
+secondary: SECONDARY_CV_DEFINITION  # optional; remove if not needed
+
+bb: RESTRAINT ARG=cv1 KAPPA=KAPPA_VALUE \
+    AT=@replicas:AT_VALUE_0,AT_VALUE_1,AT_VALUE_2,...
+
+PRINT ARG=cv1,secondary,bb.bias FILE=../colvar_multi.dat STRIDE=100

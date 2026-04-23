@@ -1,0 +1,51 @@
+# vim:ft=plumed
+# Generic parallel-tempering + metadynamics (PT-METAD) template
+# One copy of this file per temperature replica (with different HEIGHT values),
+# or use a single file with @replicas: for HEIGHT if grid bounds are the same.
+#
+# Temperature ladder: np.geomspace(T_MIN, T_MAX, N_REPLICAS)
+# HEIGHT scaling:     HEIGHT_i = HEIGHT_base * (T_i / T_base)
+#
+# Key: choose cv_biased to enhance barrier crossing at high T,
+#      and cv_analysis to monitor the physically relevant observable at all T.
+#      These can be the same CV or different ones.
+#
+# After the run, reweight the T=T_base replica trajectory using plumed-metad Stage 4.
+# The reweighting must remove both the temperature bias AND the METAD bias.
+#
+# Run command:
+#   mpiexec -np N_REPLICAS gmx_mpi mdrun \
+#       -multidir rep_0 rep_1 ... rep_{N-1} \
+#       -plumed ../plumed_pt_metad.dat \
+#       -nsteps NSTEPS -replex 200
+#
+# Replace CAPS placeholders:
+#   CV_BIASED_DEFINITION   — CV that metadynamics will bias (enhances barrier crossing)
+#   CV_ANALYSIS_DEFINITION — CV to track for analysis at the target temperature
+#   REFERENCE_PDB          — for MOLINFO; remove if unused
+#   SIGMA_VALUE            — Gaussian width (set from unbiased run at T_base)
+#   BIASFACTOR_VALUE       — well-tempered bias factor
+#   HEIGHT_AT_THIS_T       — scaled HEIGHT for this replica's temperature
+#   CV_MIN / CV_MAX        — grid bounds for the biased CV
+
+MOLINFO STRUCTURE=REFERENCE_PDB     # remove if not using MOLINFO shortcuts
+
+# CV to bias with metadynamics
+cv_biased: CV_BIASED_DEFINITION
+
+# CV to monitor for analysis (can be same as cv_biased or a different observable)
+cv_analysis: CV_ANALYSIS_DEFINITION
+
+# Well-tempered metadynamics — HEIGHT scaled with temperature
+m: METAD ...
+  ARG=cv_biased
+  SIGMA=SIGMA_VALUE
+  HEIGHT=HEIGHT_AT_THIS_T           # = HEIGHT_base * (T_this / T_base)
+  BIASFACTOR=BIASFACTOR_VALUE
+  PACE=500
+  FILE=HILLS
+  GRID_MIN=CV_MIN
+  GRID_MAX=CV_MAX
+...
+
+PRINT ARG=cv_biased,cv_analysis,m.bias FILE=COLVAR STRIDE=100
