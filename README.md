@@ -22,6 +22,9 @@ Simulations are run primarily with GROMACS and AMBER, analysed with MDtraj, and 
 | `amber-parameterize` | Small-molecule parameterization with AmberTools (antechamber, parmchk2, tleap); GAFF/GAFF2 force fields; GROMACS conversion via acpype |
 | `dft-homo-lumo` | DFT geometry optimisation and HOMO/LUMO frontier orbital analysis using PySCF |
 | `bash-parallelize` | Identify independent work items in a task description or bash loop and run them in parallel using subagents; safety-checks system load before launching |
+| `plumed-us` | Umbrella sampling setup and analysis with PLUMED: multi-window RESTRAINT input files, WHAM analysis, free energy profiles and error bars |
+| `plumed-metad` | Metadynamics setup and analysis with PLUMED: well-tempered metadynamics, free energy surfaces with sum_hills, reweighting, block error analysis, convergence assessment |
+| `plumed-remd` | Replica simulations with PLUMED: umbrella sampling with replica exchange, bias-exchange metadynamics, parallel-tempering metadynamics, trajectory demuxing and WHAM analysis |
 
 ## Installation
 
@@ -50,4 +53,7 @@ Invoke a skill from any Claude Code session:
 /amber-parameterize
 /dft-homo-lumo
 /bash-parallelize
+/plumed-us
+/plumed-metad
+/plumed-remd
 ```
