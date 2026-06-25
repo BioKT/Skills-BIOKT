@@ -114,5 +114,5 @@ If the file already exists, say so and skip creation.
 ## Notes
 
 - **Use before `/clear`**: entries are inferred from the current conversation context; once cleared, that context is gone.
-- **Git-trackable**: `LABNOTEBOOK.md` lives in the project root alongside `TODO.md` and `CONTEXT.md`. Add it to git tracking manually if desired.
+- **Git-trackable**: `LABNOTEBOOK.md` lives in the project root alongside `TODO.md` and `CHECKPOINT.md`. Add it to git tracking manually if desired.
 - **Secondary inference**: if running at the start of a new session with no conversation context, suggest using `git log --since="<last entry date>"` to reconstruct what changed.
