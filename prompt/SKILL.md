@@ -12,7 +12,9 @@ user-invocable: true
 *v3.0 — Unified prompt formatter. Three modes, one skill.*
 
 ## Reference Files
-@~/.claude/skills/prompt-references/formatting-core.md
+Before formatting, read `${CLAUDE_SKILL_DIR}/references/formatting-core.md` —
+it holds the shared formatting elements, depth calibration, and tool routing
+rules used by all three modes below.
 
 ## Input
 $ARGUMENTS

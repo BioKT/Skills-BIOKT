@@ -82,7 +82,7 @@ Report success or failure before continuing.
 ### Step 2: Run the conversion script
 
 ```bash
-python ~/.claude/skills/tyler/convert.py "PDF_DIR" "WIKI_DIR" [OPTIONS]
+python ${CLAUDE_SKILL_DIR}/convert.py "PDF_DIR" "WIKI_DIR" [OPTIONS]
 ```
 
 **Available flags:**

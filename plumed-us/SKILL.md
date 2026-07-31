@@ -3,7 +3,7 @@ name: plumed-us
 description: Umbrella sampling setup and analysis with PLUMED. Use when setting up
   multi-window umbrella sampling simulations, generating RESTRAINT input files,
   running WHAM analysis, or computing free energy profiles and error bars.
-user_invocable: true
+user-invocable: true
 ---
 
 # PLUMED Umbrella Sampling

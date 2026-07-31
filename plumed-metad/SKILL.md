@@ -3,7 +3,7 @@ name: plumed-metad
 description: Metadynamics setup and analysis with PLUMED. Use when setting up
   well-tempered metadynamics, calculating free energy surfaces with sum_hills,
   reweighting trajectories, running block error analysis, or assessing convergence.
-user_invocable: true
+user-invocable: true
 ---
 
 # PLUMED Metadynamics

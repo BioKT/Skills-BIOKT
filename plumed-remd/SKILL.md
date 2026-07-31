@@ -3,7 +3,7 @@ name: plumed-remd
 description: Multiple replica simulations with PLUMED. Use when setting up umbrella
   sampling with replica exchange, bias-exchange metadynamics, or parallel-tempering
   metadynamics, and for demuxing trajectories and WHAM analysis.
-user_invocable: true
+user-invocable: true
 ---
 
 # PLUMED Multiple Replica Simulations

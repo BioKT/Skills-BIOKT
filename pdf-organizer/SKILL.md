@@ -1,15 +1,16 @@
 ---
 name: pdf-organizer
 description: Organize PDF journal articles from ~/Downloads into ~/Documents/Work/Articles/ using heuristic classification. Renames files to firstauthor-year.pdf and applies Finder tags.
-triggers:
-  - /pdf-organizer
+user-invocable: true
+allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/organize_papers.py:*), Read
 ---
 
 Run the PDF organizer script to classify and move journal articles from ~/Downloads.
 
-The script `organize_papers.py` is bundled in this skill directory.
+The script `organize_papers.py` is bundled in this skill directory;
+`${CLAUDE_SKILL_DIR}` resolves to wherever the skill is installed.
 
-- Script: `~/.claude/skills/pdf-organizer/organize_papers.py`
+- Script: `${CLAUDE_SKILL_DIR}/organize_papers.py`
 - Requires Python 3 with `pypdf` (`pip install pypdf`); `ghostscript`/`xattr` are
   used optionally for text fallback and Finder tags.
 
@@ -17,19 +18,19 @@ The script `organize_papers.py` is bundled in this skill directory.
 
 **Always dry-run first:**
 ```bash
-python3 ~/.claude/skills/pdf-organizer/organize_papers.py \
+python3 ${CLAUDE_SKILL_DIR}/organize_papers.py \
   --dry-run --limit 20 --verbose
 ```
 
 **Full dry-run (all files, review CSV before committing):**
 ```bash
-python3 ~/.claude/skills/pdf-organizer/organize_papers.py \
+python3 ${CLAUDE_SKILL_DIR}/organize_papers.py \
   --dry-run
 ```
 
 **Full run:**
 ```bash
-python3 ~/.claude/skills/pdf-organizer/organize_papers.py
+python3 ${CLAUDE_SKILL_DIR}/organize_papers.py
 ```
 
 ## What it does
