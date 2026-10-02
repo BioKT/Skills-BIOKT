@@ -134,37 +134,7 @@ echo "SOL" | gmx genion \
 ## Stage 4: Energy Minimisation (EM)
 
 ### mdp/em.mdp
-```ini
-; Energy minimization — steepest descent
-; ff99SBws-STQ / TIP4P-2005
-
-integrator               = steep
-nsteps                   = 50000
-emtol                    = 100.0       ; kJ/mol/nm
-emstep                   = 0.01        ; nm
-
-; Output
-nstxout-compressed       = 500
-nstlog                   = 500
-nstenergy                = 500
-
-; Neighbour list
-cutoff-scheme            = Verlet
-nstlist                  = 10
-ns_type                  = grid
-pbc                      = xyz
-
-; Electrostatics
-coulombtype              = PME
-rcoulomb                 = 1.0
-pme-order                = 4
-fourierspacing           = 0.12
-
-; Van der Waals
-vdwtype                  = Cut-off
-rvdw                     = 1.0
-DispCorr                 = EnerPres
-```
+Copy `${CLAUDE_SKILL_DIR}/templates/em.mdp` to `mdp/em.mdp`. Steepest descent, `emtol = 100` kJ/mol/nm, `nsteps = 50000`.
 
 ### Commands
 ```bash
@@ -185,64 +155,7 @@ echo "Potential" | gmx energy -f runs/em/em.edr -o runs/em/potential.xvg -xvg no
 ## Stage 5: NVT Equilibration (with position restraints)
 
 ### mdp/nvt.mdp
-```ini
-; NVT equilibration — 200 ps, 300 K
-; Position restraints on heavy atoms (POSRES defined in topology)
-; ff99SBws-STQ / TIP4P-2005
-
-define                   = -DPOSRES
-
-integrator               = md
-dt                       = 0.002        ; ps
-nsteps                   = 100000       ; 200 ps
-comm-mode                = Linear
-nstcomm                  = 100
-
-; Output
-nstxout                  = 0
-nstvout                  = 0
-nstfout                  = 0
-nstxout-compressed       = 5000         ; 10 ps
-nstlog                   = 1000
-nstenergy                = 1000
-
-; Neighbour list
-cutoff-scheme            = Verlet
-nstlist                  = 10
-pbc                      = xyz
-
-; Electrostatics
-coulombtype              = PME
-rcoulomb                 = 1.0
-pme-order                = 4
-fourierspacing           = 0.12
-
-; Van der Waals
-vdwtype                  = Cut-off
-rvdw                     = 1.0
-DispCorr                 = EnerPres
-
-; Bonds
-constraints              = h-bonds
-constraint_algorithm     = lincs
-lincs-iter               = 1
-lincs-order              = 4
-continuation             = no
-
-; Temperature — V-rescale
-tcoupl                   = V-rescale
-tc-grps                  = Protein Non-Protein
-tau_t                    = 0.1    0.1
-ref_t                    = 300    300
-
-; No pressure coupling in NVT
-pcoupl                   = no
-
-; Generate velocities
-gen_vel                  = yes
-gen_temp                 = 300
-gen_seed                 = -1
-```
+Copy `${CLAUDE_SKILL_DIR}/templates/nvt.mdp` to `mdp/nvt.mdp`. 200 ps, `define = -DPOSRES`, V-rescale 300 K (`tau_t = 0.1`), `gen_vel = yes`.
 
 ### Commands
 ```bash
@@ -263,63 +176,7 @@ echo "Temperature" | gmx energy -f runs/nvt/nvt.edr -o runs/nvt/temperature.xvg 
 ## Stage 6: NPT Equilibration
 
 ### mdp/npt.mdp
-```ini
-; NPT equilibration — 1 ns, 300 K, 1 bar
-; ff99SBws-STQ / TIP4P-2005
-
-integrator               = md
-dt                       = 0.002        ; ps
-nsteps                   = 500000       ; 1 ns
-comm-mode                = Linear
-nstcomm                  = 100
-
-; Output
-nstxout                  = 0
-nstvout                  = 0
-nstfout                  = 0
-nstxout-compressed       = 5000         ; 10 ps
-nstlog                   = 1000
-nstenergy                = 1000
-
-; Neighbour list
-cutoff-scheme            = Verlet
-nstlist                  = 10
-pbc                      = xyz
-
-; Electrostatics
-coulombtype              = PME
-rcoulomb                 = 1.0
-pme-order                = 4
-fourierspacing           = 0.12
-
-; Van der Waals
-vdwtype                  = Cut-off
-rvdw                     = 1.0
-DispCorr                 = EnerPres
-
-; Bonds
-constraints              = h-bonds
-constraint_algorithm     = lincs
-lincs-iter               = 1
-lincs-order              = 4
-continuation             = yes          ; velocities from NVT checkpoint
-
-; Temperature — V-rescale
-tcoupl                   = V-rescale
-tc-grps                  = Protein Non-Protein
-tau_t                    = 0.1    0.1
-ref_t                    = 300    300
-
-; Pressure — Parrinello-Rahman
-pcoupl                   = Parrinello-Rahman
-pcoupltype               = isotropic
-tau_p                    = 2.0          ; ps
-ref_p                    = 1.0          ; bar
-compressibility          = 4.5e-5       ; bar⁻¹
-refcoord-scaling         = com
-
-gen_vel                  = no
-```
+Copy `${CLAUDE_SKILL_DIR}/templates/npt.mdp` to `mdp/npt.mdp`. 1 ns, V-rescale 300 K, Parrinello-Rahman 1 bar (`tau_p = 2.0`), `continuation = yes`.
 
 > **Note:** For early equilibration of poorly equilibrated systems, substitute `Berendsen` for `Parrinello-Rahman` (`tau_p = 2.0`). Switch to Parrinello-Rahman for any production run.
 
@@ -345,58 +202,7 @@ echo "Density\nPressure" | gmx energy -f runs/npt/npt.edr \
 ### NVT production (preferred for IDPs — Langevin dynamics)
 
 ### mdp/prod_nvt.mdp
-```ini
-; Production NVT — sd (Langevin) integrator
-; ff99SBws-STQ / TIP4P-2005
-
-integrator               = sd
-dt                       = 0.002        ; ps
-nsteps                   = 50000000     ; 100 ns (adjust as needed)
-comm-mode                = Linear
-nstcomm                  = 100
-
-; Output
-nstxout                  = 0
-nstvout                  = 0
-nstfout                  = 0
-nstxout-compressed       = 5000         ; 10 ps
-nstlog                   = 5000
-nstenergy                = 5000
-compressed-x-grps        = non-Water
-
-; Neighbour list
-cutoff-scheme            = Verlet
-nstlist                  = 10
-pbc                      = xyz
-
-; Electrostatics
-coulombtype              = PME
-rcoulomb                 = 1.0
-pme-order                = 4
-fourierspacing           = 0.12
-
-; Van der Waals
-vdwtype                  = Cut-off
-rvdw                     = 1.0
-DispCorr                 = EnerPres
-
-; Bonds
-constraints              = h-bonds
-constraint_algorithm     = lincs
-lincs-iter               = 1
-lincs-order              = 4
-continuation             = yes
-
-; Temperature — sd uses its own thermostat (ld-seed = -1 for random)
-tc-grps                  = Protein Non-Protein
-tau_t                    = 1.0    1.0
-ref_t                    = 300    300
-
-; No pressure coupling (NVT production)
-pcoupl                   = no
-
-gen_vel                  = no
-```
+Copy `${CLAUDE_SKILL_DIR}/templates/prod_nvt.mdp` to `mdp/prod_nvt.mdp`. `sd` integrator (`tau_t = 1.0`), 100 ns default, no pressure coupling, writes `non-Water` only.
 
 ### Commands
 ```bash
@@ -413,17 +219,7 @@ gmx check -f runs/prod/prod.xtc 2>&1 | grep "^Last frame"
 ```
 
 ### NPT production (globular proteins)
-Use the same mdp as NVT production but change:
-```ini
-integrator               = md
-pcoupl                   = Parrinello-Rahman
-pcoupltype               = isotropic
-tau_p                    = 2.0
-ref_p                    = 1.0
-compressibility          = 4.5e-5
-refcoord-scaling         = com
-tcoupl                   = V-rescale   ; replace sd thermostat
-```
+Copy `${CLAUDE_SKILL_DIR}/templates/prod_npt.mdp` to `mdp/prod_npt.mdp`: same as `prod_nvt.mdp` but `md` + V-rescale (`tau_t = 0.1`) + Parrinello-Rahman, and grompp it in place of `prod_nvt.mdp`.
 
 ---
 
