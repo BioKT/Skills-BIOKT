@@ -3,7 +3,6 @@ name: plumed-us
 description: Umbrella sampling setup and analysis with PLUMED. Use when setting up
   multi-window umbrella sampling simulations, generating RESTRAINT input files,
   running WHAM analysis, or computing free energy profiles and error bars.
-user-invocable: true
 ---
 
 # PLUMED Umbrella Sampling
@@ -164,7 +163,7 @@ done
 
 ```python
 import numpy as np, plumed
-import sys; sys.path.insert(0, "templates/")  # or wherever wham.py lives
+import sys; sys.path.insert(0, "${CLAUDE_SKILL_DIR}/templates/")
 import wham
 
 kBT = TEMPERATURE * 8.314462618e-3  # kJ/mol
@@ -276,7 +275,7 @@ Repeat Stages 3–6 with a different starting configuration. If the reweighted F
 
 ## Working Examples (alanine dipeptide)
 
-The `templates/examples/` directory contains working PLUMED input files from PLUMED Masterclass 21.3,
+The `${CLAUDE_SKILL_DIR}/templates/examples/` directory contains working PLUMED input files from PLUMED Masterclass 21.3,
 using alanine dipeptide in vacuum with phi torsion as the reaction coordinate.
 Use these as a reference for syntax; adapt CV definitions for your own system.
 
@@ -288,7 +287,7 @@ Use these as a reference for syntax; adapt CV definitions for your own system.
 
 Run example (requires `data/topolA.tpr` and `data/reference.pdb`):
 ```bash
-gmx mdrun -plumed templates/examples/plumed_ex1.dat -s data/topolA.tpr -nsteps 200000
+gmx mdrun -plumed ${CLAUDE_SKILL_DIR}/templates/examples/plumed_ex1.dat -s data/topolA.tpr -nsteps 200000
 ```
 
 ---

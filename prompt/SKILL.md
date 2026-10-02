@@ -4,12 +4,11 @@ description: >
   Format an informal request into a structured prompt, then execute it.
   Add "only:" prefix or say "hold"/"don't run" to output without executing.
   Add "refine:" prefix to audit and improve an existing prompt instead.
-user-invocable: true
+  Use when the user types /prompt or asks to turn a rough request into a
+  structured prompt.
 ---
 
 # /prompt — Format, Execute, or Refine
-
-*v3.0 — Unified prompt formatter. Three modes, one skill.*
 
 ## Reference Files
 Before formatting, read `${CLAUDE_SKILL_DIR}/references/formatting-core.md` —

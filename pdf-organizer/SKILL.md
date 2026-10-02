@@ -1,7 +1,6 @@
 ---
 name: pdf-organizer
 description: Organize PDF journal articles from ~/Downloads into ~/Documents/Work/Articles/. Resolves author and year from the DOI via Crossref, verifies each match against the document, and renames to firstauthor-year.pdf.
-user-invocable: true
 allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/organize_papers.py:*), Read
 ---
 

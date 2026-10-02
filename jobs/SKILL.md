@@ -1,7 +1,6 @@
 ---
 name: jobs
 description: Track running and completed simulation jobs in a project's JOBS.md across all machines. Use when checking which jobs are running, recording a newly submitted job, querying SLURM status, or archiving finished runs.
-user-invocable: true
 argument-hint: "[add|update|clean]"
 allowed-tools: Read, Write, Edit, Glob, Bash
 ---

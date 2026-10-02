@@ -1,14 +1,9 @@
 ---
 name: review-plan
-description: Stress-test a plan with structured expert critique, best-practice research, and optional fresh-context subagent review. Use after developing a plan to catch blind spots, missing steps, and wishful thinking.
-user-invocable: true
+description: Stress-test a plan with structured expert critique, best-practice research, and optional fresh-context subagent review. Use after developing a plan, or on any plan file, to catch blind spots, missing steps, and wishful thinking.
 ---
 
 # Plan Review
-
-*v1.1 — Stress-test a plan with structured expert critique, best-practice research, and optional fresh-context subagent review*
-
-Stress-test a plan with structured expert critique, web research on best practices, and a revised version if needed. Use after developing a plan, or on any plan file. Catches blind spots, missing steps, and wishful thinking.
 
 ## Instructions
 

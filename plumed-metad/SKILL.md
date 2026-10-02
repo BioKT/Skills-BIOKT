@@ -3,7 +3,6 @@ name: plumed-metad
 description: Metadynamics setup and analysis with PLUMED. Use when setting up
   well-tempered metadynamics, calculating free energy surfaces with sum_hills,
   reweighting trajectories, running block error analysis, or assessing convergence.
-user-invocable: true
 ---
 
 # PLUMED Metadynamics
@@ -190,7 +189,7 @@ with open("cv.weight", "w") as f:
 Run the block analysis script for multiple block sizes:
 ```bash
 for bs in 1 2 5 10 20 50 100 200 500 1000; do
-    python3 templates/do_block_fes.py cv.weight 1 CV1_MIN CV1_MAX N_BINS KBT ${bs}
+    python3 ${CLAUDE_SKILL_DIR}/templates/do_block_fes.py cv.weight 1 CV1_MIN CV1_MAX N_BINS KBT ${bs}
 done
 ```
 
@@ -248,7 +247,7 @@ autocorrelation is long. Run longer, or use replica methods.
 
 ## Working Examples (alanine dipeptide)
 
-The `templates/examples/` directory contains working PLUMED input files from PLUMED Masterclass 21.4,
+The `${CLAUDE_SKILL_DIR}/templates/examples/` directory contains working PLUMED input files from PLUMED Masterclass 21.4,
 using alanine dipeptide in vacuum with backbone torsion angles as CVs.
 Use these as a reference for syntax; adapt CV definitions for your own system.
 
@@ -259,7 +258,7 @@ Use these as a reference for syntax; adapt CV definitions for your own system.
 
 Run example (requires `data/diala/topolA.tpr` and `data/diala/dialaA.pdb`):
 ```bash
-gmx mdrun -plumed templates/examples/plumed_ex1.dat \
+gmx mdrun -plumed ${CLAUDE_SKILL_DIR}/templates/examples/plumed_ex1.dat \
           -s data/diala/topolA.tpr -nsteps 200000
 ```
 

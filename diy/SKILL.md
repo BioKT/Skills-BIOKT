@@ -1,7 +1,6 @@
 ---
 name: diy
 description: Execute the action most recently proposed in the conversation instead of describing it again. Use when the user says "do it", "go ahead", "just do it", or types /diy after Claude has offered a command, script, or set of steps but not run them.
-user-invocable: true
 argument-hint: "[action or hint]"
 ---
 

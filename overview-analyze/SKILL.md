@@ -1,7 +1,6 @@
 ---
 name: overview-analyze
 description: Analyse saved /overview logs to track research progress over time — task velocity, stale projects, backlog trends, job activity. Use when reviewing mid/long-term progress, identifying stalled work, or evaluating which projects are moving.
-user-invocable: true
 allowed-tools: Read, Glob, Bash
 ---
 

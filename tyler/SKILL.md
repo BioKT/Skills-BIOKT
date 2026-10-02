@@ -2,7 +2,6 @@
 name: tyler
 description: Convert a folder of academic PDF papers into a token-efficient markdown wiki for literature review. Use this skill when the user has a folder of PDFs they want processed into .md files that Claude Code can read cheaply. Trigger phrases include "convert my PDFs", "build my wiki", "process my papers folder", "/tyler".
 allowed-tools: Bash, Read, Write, Edit
-user-invocable: true
 ---
 
 # PDF-to-Wiki Skill

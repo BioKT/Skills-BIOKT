@@ -1,7 +1,6 @@
 ---
 name: checkpoint
 description: Save or load session context via CHECKPOINT.md. Use to checkpoint before /clear, or restore context at the start of a new session.
-user-invocable: true
 allowed-tools: Read, Write, Bash, Glob
 ---
 

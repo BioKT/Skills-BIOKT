@@ -3,7 +3,6 @@ name: plumed-remd
 description: Multiple replica simulations with PLUMED. Use when setting up umbrella
   sampling with replica exchange, bias-exchange metadynamics, or parallel-tempering
   metadynamics, and for demuxing trajectories and WHAM analysis.
-user-invocable: true
 ---
 
 # PLUMED Multiple Replica Simulations
@@ -131,7 +130,7 @@ grep "Replica" rep_0/md.log | tail -20
 
 ```python
 import numpy as np, plumed
-import sys; sys.path.insert(0, "templates/")  # or wherever wham.py lives
+import sys; sys.path.insert(0, "${CLAUDE_SKILL_DIR}/templates/")
 import wham
 
 kBT = TEMPERATURE * 8.314462618e-3  # kJ/mol
@@ -189,7 +188,7 @@ with the `traj_weight` parameter in WHAM.
 
 ```python
 import numpy as np, plumed
-import sys; sys.path.insert(0, "templates/")
+import sys; sys.path.insert(0, "${CLAUDE_SKILL_DIR}/templates/")
 import wham
 
 kBT = TEMPERATURE * 8.314462618e-3
@@ -258,7 +257,7 @@ file must be used independently for reweighting at that temperature. Do NOT mix 
 
 ## Working Examples (alanine dipeptide)
 
-The `templates/examples/` directory contains working PLUMED input files from PLUMED Masterclass 21.5,
+The `${CLAUDE_SKILL_DIR}/templates/examples/` directory contains working PLUMED input files from PLUMED Masterclass 21.5,
 using alanine dipeptide in vacuum. Use these as reference for syntax; adapt for your system.
 
 - `plumed_ex1.dat` — US-REMD: 32-window RESTRAINT with `@replicas:` syntax
@@ -270,7 +269,7 @@ Run example (requires `topolA.tpr`, `reference.pdb`; 32 MPI ranks):
 mkdir -p $(seq -f "rep_%g" 0 31)
 mpiexec -np 32 gmx_mpi mdrun \
     -multidir $(seq -f "rep_%g" 0 31) \
-    -plumed templates/examples/plumed_ex1.dat \
+    -plumed ${CLAUDE_SKILL_DIR}/templates/examples/plumed_ex1.dat \
     -nsteps 200000 -replex 200
 ```
 

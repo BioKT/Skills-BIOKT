@@ -1,7 +1,6 @@
 ---
 name: bitacora
-description: Prepend and query a lab-notebook log (LABNOTEBOOK.md) of work done in the current project. Run before /clear to record what was done this session.
-user-invocable: true
+description: Prepend and query a lab-notebook log (LABNOTEBOOK.md) of work done in the current project. Use when recording what was done this session (typically before /clear) or looking up past work in the notebook.
 allowed-tools: Read, Write, Edit, Glob, Bash
 ---
 

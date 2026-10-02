@@ -1,7 +1,6 @@
 ---
 name: todo
 description: View, add, complete, reorganize, or auto-update tasks in the project's TODO.md file. Use when tracking progress, adding new ideas, marking tasks done, or inferring completed tasks from conversation context.
-user-invocable: true
 allowed-tools: Read, Write, Edit, Glob
 ---
 
