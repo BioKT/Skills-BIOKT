@@ -339,3 +339,6 @@ head COLVAR
 | `SIMD: no such instruction` | Wrong SIMD flag | Use `-DGMX_SIMD=AUTO` or set to `SSE4.1` for older CPUs |
 | `make: out of memory` with `-j$(nproc)` | Too many parallel jobs | Use `-j4` or `-j8` instead |
 | GMXRC `unbound variable` error under `set -e` | GMXRC uses `$VARIABLE:-` syntax | Wrap: `set +u; source GMXRC; set -u` |
+| `gmx_mpi` (even `--version`) or any MPI program hangs at 0 CPU; stray `orted --singleton-died-pipe` daemons | hwloc's GL plugin waits on a hung local X server (`strace` shows `poll` on `/tmp/.X11-unix/X*`); not a GROMACS/MPI build problem, so a rebuild won't help | `export HWLOC_COMPONENTS=-gl` (unsetting `DISPLAY` is not enough); kill the daemons with `kill -9` |
+| `-bonded gpu` error in water benchmark | Pure water has no bonded terms | Drop `-bonded gpu` for water boxes |
+| `-update gpu` error with `-plumed` | PLUMED requires CPU update | Drop `-update gpu` when PLUMED is active |
