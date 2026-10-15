@@ -16,8 +16,9 @@ Parse `$ARGUMENTS` to select the action:
 
 | Invocation | Action |
 |-----------|--------|
-| *(empty)* or `log` | Draft a new entry from conversation context, show for review, then write on confirmation |
-| `log "..."` | Pre-fill Summary with the quoted text; still show draft for review |
+| *(empty)* or `log` | Infer a new entry from conversation context and write it directly |
+| `log "..."` | Same, with the Summary pre-filled from the quoted text |
+| `log --review` (or `--review` alone) | Show the draft for review and write only on confirmation |
 | `show [N]` | Print the last N entries (default 5) |
 | `search <term>` | Find entries containing the term |
 | `init` | Create LABNOTEBOOK.md if it doesn't exist |
@@ -65,15 +66,20 @@ Entries are **prepended** (newest first) so the most recent entry appears at the
    - Figures: any plots or images mentioned or produced (suggest paths, do not auto-include all)
    - Next: any explicit next steps mentioned
 
-2. **Show the draft** in a fenced markdown block.
+2. **Write the entry**: prepend it to `LABNOTEBOOK.md` by inserting it immediately after the header block (the `---` separator line). Create the file first if it doesn't exist using the `init` template. Do not show the draft or ask for confirmation.
 
-3. **Ask the user**: *"Write this entry to LABNOTEBOOK.md? You can confirm, request edits (e.g. 'drop figures', 'remove file X', 'add ...'), or discard."*
-
-4. **Apply any edits** and show the revised draft if changes were requested.
-
-5. **On confirmation**: prepend the entry to `LABNOTEBOOK.md` by inserting it immediately after the header block (the `---` separator line). Create the file first if it doesn't exist using the `init` template. Report the date and line count written.
+3. **Report briefly**: the date, the Summary line, and the number of lines written — not the full entry. Mention that the user can ask to amend it.
 
 If `log "..."` was used, pre-populate the Summary field with the quoted text before inferring the rest.
+
+### With `--review`
+
+Replace steps 2–3 with:
+
+1. **Show the draft** in a fenced markdown block.
+2. **Ask the user**: *"Write this entry to LABNOTEBOOK.md? You can confirm, request edits (e.g. 'drop figures', 'remove file X', 'add ...'), or discard."*
+3. **Apply any edits** and show the revised draft if changes were requested.
+4. **On confirmation**: write and report as in steps 2–3 above.
 
 ---
 
