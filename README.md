@@ -25,7 +25,7 @@ Simulations are run primarily with GROMACS and AMBER, analysed with MDtraj, and 
 | `plumed-us` | Umbrella sampling setup and analysis with PLUMED: multi-window RESTRAINT input files, WHAM analysis, free energy profiles and error bars |
 | `plumed-metad` | Metadynamics setup and analysis with PLUMED: well-tempered metadynamics, free energy surfaces with sum_hills, reweighting, block error analysis, convergence assessment |
 | `plumed-remd` | Replica simulations with PLUMED: umbrella sampling with replica exchange, bias-exchange metadynamics, parallel-tempering metadynamics, trajectory demuxing and WHAM analysis |
-| `council` | Panel of independent fresh-context reviewers (funder-panel, domain-expert, feasibility and call-compliance personas; or referee/editor personas for manuscripts) plus a separate synthesizer, for our own proposals and papers |
+| `council` | Panel of independent fresh-context reviewers (funder-panel, domain-expert, feasibility and call-compliance personas; referee/editor personas for manuscripts; or question-fit, sampling, compute-budget and pre-mortem personas for simulation campaign plans) plus a separate synthesizer, for our own proposals, papers and plans |
 
 ## Installation
 
@@ -59,6 +59,7 @@ Invoke a skill from any Claude Code session:
 /plumed-remd
 /council proposal file:main.tex call:call.pdf
 /council manuscript file:paper/main.tex
+/council plan file:PLAN.md
 ```
 
 ## Acknowledgements

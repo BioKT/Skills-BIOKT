@@ -1,6 +1,6 @@
 # Council brief — <topic>
 
-Date: YYYY-MM-DD · Mode: <proposal|manuscript|ideas> · Panel: <personas>
+Date: YYYY-MM-DD · Mode: <proposal|manuscript|ideas|plan> · Panel: <personas>
 
 ## Objective (user's words)
 <What the user wants from this council, verbatim where possible.>
@@ -16,6 +16,18 @@ Date: YYYY-MM-DD · Mode: <proposal|manuscript|ideas> · Panel: <personas>
   by the user" followed by the text>
 - Limits: <pages / words / figures / budget ceiling / duration>
 - Deadline: <date, if relevant>
+
+<In `plan` mode, replace "Target" with the section below.>
+
+## Question and resources (plan mode)
+- Scientific question and hypotheses: <user's words>
+- Systems: <proteins/constructs, conditions>
+- What counts as success: <the result that would answer the question>
+- Machines and allocations available: <hosts, GPUs, cluster hours>
+- Known throughput: <ns/day per system and machine, if known>
+- Deadline / time available: <date or weeks>
+- Reference files (only with `skills`): <absolute paths to house protocol
+  skills and machine notes that members may consult>
 
 ## Fixed constraints (do not relitigate)
 <Decisions the user has already made: team, budget ceiling, host

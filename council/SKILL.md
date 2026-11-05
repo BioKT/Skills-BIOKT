@@ -1,11 +1,11 @@
 ---
 name: council
-description: Convene a panel of independent fresh-context reviewers (subagents with distinct personas) on a research proposal or our own manuscript, then a separate fresh synthesizer. Use when asked for a council, panel review, mock evaluation panel, or "Referee 2" pass on a proposal, grant, aims page, or paper draft. Also develops alternative aims/framings at the ideas stage.
-argument-hint: "[proposal|manuscript|ideas] [file:path] [call:path] [panel:a,b,c] [focus:...] [lit] [help]"
+description: Convene a panel of independent fresh-context reviewers (subagents with distinct personas) on a research proposal, our own manuscript, or a plan for a simulation campaign, then a separate fresh synthesizer. Use when asked for a council, panel review, mock evaluation panel, or "Referee 2" pass on a proposal, grant, aims page, or paper draft, or to stress-test whether planned calculations can answer a scientific question within time and compute limits. Also develops alternative aims/framings at the ideas stage.
+argument-hint: "[proposal|manuscript|ideas|plan] [file:path] [call:path] [panel:a,b,c] [focus:...] [lit] [skills] [help]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
-# /council — Independent Panel Review for Proposals and Manuscripts
+# /council — Independent Panel Review for Proposals, Manuscripts and Plans
 
 Adapted from the `council` / `adversarial-review` skills in Chris
 Blattman's [claudeblattman](https://github.com/chrisblattman/claudeblattman)
@@ -19,7 +19,7 @@ prepares the brief, dispatches, and presents results.
 
 ## Scope
 
-- Our **own** proposals and manuscripts only. Do not run a council on a
+- Our **own** proposals, manuscripts and plans only. Do not run a council on a
   manuscript or proposal we have been sent to **referee**: journal and
   funder confidentiality rules generally forbid uploading it to AI tools.
   If the document looks like someone else's confidential submission, stop
@@ -33,12 +33,13 @@ prepares the brief, dispatches, and presents results.
 
 | Flag | Syntax | Default | Purpose |
 |------|--------|---------|---------|
-| Mode | `proposal` / `manuscript` / `ideas` | auto-detect | Which panel and output format |
+| Mode | `proposal` / `manuscript` / `ideas` / `plan` | auto-detect | Which panel and output format |
 | File | `file:path` | ask | Document to review (.tex, .md, .pdf, .docx, or a folder) |
 | Call | `call:path` | ask (proposal) | Call text / evaluation criteria / templates |
 | Panel | `panel:a,b,c` | mode default | Exact personas, any from `personas/` |
 | Focus | `focus:"..."` | none | Extra question every member must address |
 | Literature | `lit` | off | Members may check novelty/citations via PubMed/OpenAlex/bioRxiv skills |
+| House skills | `skills` | off (`plan`: on) | Members may read our protocol skills and machine notes as reference |
 | Dry run | `dryrun` | off | Write the brief and show the panel; do not dispatch |
 
 **Default panels** (persona files in `personas/`):
@@ -48,9 +49,15 @@ prepares the brief, dispatches, and presents results.
 | `proposal` | `panel-generalist`, `domain-skeptic`, `pre-mortem`, `call-compliance` |
 | `manuscript` | `referee-methods`, `experimentalist`, `editor`, `reproducibility` |
 | `ideas` | `panel-generalist`, `domain-skeptic`, `pre-mortem` (development instructions) |
+| `plan` | `question-fit`, `sampling-methods`, `compute-budget`, `pre-mortem` |
+
+Add `experimentalist` to a `plan` panel when the campaign is meant to be
+compared with experimental data.
 
 Auto-detect mode from the document (aims, work packages, budget, call →
-`proposal`; abstract/results/figures → `manuscript`). If unclear, ask.
+`proposal`; abstract/results/figures → `manuscript`; systems, runs,
+machines and a question to answer, but no call or results → `plan`). If
+unclear, ask.
 Announce the resolved mode and panel before dispatch.
 
 ## Step 1: Gather inputs
@@ -63,7 +70,14 @@ Announce the resolved mode and panel before dispatch.
    If `call:` is missing, ask for the call document or URL, or for the
    criteria and page limits in the user's own words. Do not reconstruct a
    funder's criteria from memory.
-3. Ask only about facts that materially change the review, and only if they
+3. **Plan mode:** the plan can be a markdown file, a section of
+   `TODO.md`/`CHECKPOINT.md`, or a plan-mode file in `~/.claude/plans/`.
+   If it exists only in this conversation, write it verbatim to
+   `<archive>/PLAN.md` once the archive exists (Step 2) and review that
+   file. The scientific question,
+   the machines available and the deadline are required. If they are
+   not in the plan, ask for them. Never fill them in yourself.
+4. Ask only about facts that materially change the review, and only if they
    cannot be read from the documents: target funder/journal, stage
    (first draft vs. near-final), page/word limits, known constraints that
    reviewers should not relitigate (e.g. "the budget ceiling is fixed").
@@ -127,6 +141,17 @@ nothing material in an area, say so. Do not pad the report.
   scientific terms and never paste text from the document."
   **Without `lit`:** "Do not search the web or literature databases;
   flag claims that need checking instead."
+- **SKILLS RULE with `skills`** (append to the LIT RULE): "You may read
+  the reference files listed in the brief: our house protocols and
+  machine notes. Treat them as the group's current practice, not as
+  ground truth. Say where the plan departs from them, and also where
+  they may be inadequate for this question."
+  List in the brief only the files relevant to the plan, chosen from
+  `~/.claude/skills/<skill>/SKILL.md` for `gmx-prep`, `plumed-us`,
+  `plumed-metad`, `plumed-remd` and `amber-parameterize` (and the
+  templates they point to), plus the "Compute Infrastructure" section of `~/.claude/CLAUDE.md`. Copy that
+  section to `<archive>/machines.md` so members read only the machine
+  notes, not the rest of the file.
 
 Wait for all members. Check that every report file exists and is
 substantive. If a member failed, re-dispatch it **once** with the same
@@ -176,4 +201,6 @@ and fresh members, and only when the user asks for one.
 /council manuscript file:paper/main.tex focus:"Is the MSM convergence argument convincing?"
 /council ideas file:aims_v1.md call:aei_2027_criteria.md lit
 /council proposal panel:panel-generalist,experimentalist,pre-mortem file:draft.pdf
+/council plan file:PLAN_rest2_as4.md focus:"Is 1 µs per replica enough?"
+/council plan panel:question-fit,sampling-methods,compute-budget,pre-mortem,experimentalist
 ```

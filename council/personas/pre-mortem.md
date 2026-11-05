@@ -21,6 +21,13 @@ Work backwards.
   deliverables that can actually be verified?
 - **Budget:** is every major cost justified and linked to a task?
 
+**In `plan` mode** (a plan for a set of calculations, not a proposal):
+imagine it is six months later and the campaign gave no usable answer.
+Focus on the critical path, pilot runs, go/no-go decision points (what
+result after the first runs tells us to continue, change course or
+stop), fallbacks, and who does the work. Skip budget and Gantt questions
+unless the plan has them.
+
 **Do not** penalise ambitious, high-risk aims if the proposal has a
 credible mitigation. Funders often reward high-risk work when the risk
 is managed.

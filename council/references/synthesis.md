@@ -56,6 +56,11 @@ and literature not checked (if `lit` was off).
   with minor` / `major revision` / `reject and resubmit elsewhere`), the
   contribution in one sentence as a referee would state it, and the
   analyses that must be added before submission.
+- **plan**: `go` / `go after changes` / `rethink`, and whether the planned
+  calculations can answer the stated question at all. Then the compute
+  estimate (plan's figure vs. the panel's recomputed figure, and whether
+  it fits the deadline), the critical path, and the recommended pilot
+  runs with go/no-go criteria for each.
 - **ideas**: present the distinct directions that emerged, what each
   prioritises, the trade-offs and which can be combined. Then a reasoned
   recommendation that keeps the strongest alternative visible. Do not
